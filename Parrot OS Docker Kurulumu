@@ -1,0 +1,25 @@
+#!/bin/sh
+
+set -e
+
+# Bagimliliklarin kurulumu
+sudo apt install -y curl apt-transport-https \
+software-properties-common ca-certificates
+
+# Docker Kurulumu
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
+echo "deb [arch=amd64] https://download.docker.com/linux/debian stretch stable" | \
+  sudo tee /etc/apt/sources.list.d/docker-engine.list
+
+sudo apt-get update -y
+sudo apt-get install -y docker-ce
+
+# Docker Calistirma ve Acilisa Ekleme
+sudo systemctl start docker
+sudo systemctl enable docker
+
+# Sudo komutunu kullanmadan docker'ı kullanmak icin docker grubuna asagidaki komut ile kullanici eklenebilir.
+sudo gpasswd -a "${USER}" docker
+
+# Yeniden baslatma
+sudo reboot
